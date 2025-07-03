@@ -166,56 +166,38 @@ class MobileMoneyPayment {
 
     // Payment status polling
     async pollPaymentStatus(transactionId, phoneNumber, amount) {
-        let attempts = 0;
-        
-        console.log('Starting payment status polling for transaction:', transactionId);
-        
-        while (attempts < this.maxPollAttempts) {
-            try {
-                await this.delay(this.pollInterval);
-                attempts++;
-                
-                console.log(`Polling attempt ${attempts} for transaction:`, transactionId);
-                
-                // Check payment status
-                const statusResponse = await this.makeAPIRequest(`/payment-status/${transactionId}`);
-                
-                console.log('Status response:', statusResponse);
-                
-                if (statusResponse.success) {
-                    if (statusResponse.status === 'SUCCESSFUL' || statusResponse.paid) {
-                        await this.handlePaymentSuccess(statusResponse, amount);
-                        return;
-                    } else if (statusResponse.status === 'FAILED') {
-                        throw new Error(statusResponse.message || 'Payment failed');
-                    } else if (statusResponse.status === 'PENDING') {
-                        // Continue polling
-                        this.updatePaymentModal('Waiting for Payment Confirmation', 
-                            `Please check your phone (${phoneNumber}) and enter your PIN to complete the payment.<br><br>
-                            <small>Checking payment status... (${attempts}/${this.maxPollAttempts})</small>`);
-                    }
-                } else {
-                    // If status check fails, continue polling
-                    console.log('Status check failed, continuing to poll...');
-                }
-                
-            } catch (error) {
-                console.error(`Polling attempt ${attempts} failed:`, error);
-                
-                // If it's a network error and we haven't exceeded max attempts, continue
-                if (this.isRetryableError(error) && attempts < this.maxPollAttempts) {
-                    continue;
-                }
-                
-                // If it's the last attempt or a non-retryable error, throw
-                if (attempts >= this.maxPollAttempts || !this.isRetryableError(error)) {
-                    throw error;
-                }
+    let pollAttempts = 0;
+    const maxAttempts = 12; // ~1 minute if interval is 5s
+
+    const pollingInterval = setInterval(async () => {
+        pollAttempts++;
+
+        try {
+            const res = await fetch(`/status/${transactionId}`);
+            const data = await res.json();
+            const status = data.state;
+
+            if (status === "SUCCESSFUL") {
+                clearInterval(pollingInterval);
+                hideProcessingModal();
+                showSuccessModal();
+            } else if (status === "FAILED") {
+                clearInterval(pollingInterval);
+                hideProcessingModal();
+                showFailureModal();
+            } else if (pollAttempts >= maxAttempts) {
+                clearInterval(pollingInterval);
+                hideProcessingModal();
+                showFailureModal(); // or showTimeoutModal() if you have one
             }
+            // else: status is still pending — keep polling
+        } catch (error) {
+            console.error('Polling error:', error);
+            clearInterval(pollingInterval);
+            hideProcessingModal();
+            showFailureModal();
         }
-        
-        // If we've exhausted all polling attempts
-        throw new Error('Payment verification timeout. If you were charged, please contact support with your phone number.');
+    }, 5000);
     }
 
     // Handle successful payment
