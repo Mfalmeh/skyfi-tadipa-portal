@@ -393,3 +393,27 @@ class MobileMoneyPayment {
 
 // Global instance
 const mobileMoneyPayment = new MobileMoneyPayment();
+
+// Make initiateMTNPayment globally accessible
+window.initiateMTNPayment = function () {
+  document.getElementById('paymentModal').style.display = 'block';
+  document.getElementById('modalTitle').textContent = 'Enter Your Phone Number';
+  document.getElementById('modalContent').innerHTML = `
+    <div style="text-align: center; padding: 1rem;">
+      <input type="tel" id="phoneInput" placeholder="e.g. 0771234567" style="padding: 0.5rem; width: 80%; border-radius: 6px; border: 1px solid #ccc;" />
+      <br><br>
+      <button onclick="submitPhoneNumber()" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        Continue
+      </button>
+    </div>
+  `;
+};
+
+window.submitPhoneNumber = function () {
+  const phone = document.getElementById('phoneInput').value;
+  if (!phone) {
+    alert('Please enter your phone number.');
+    return;
+  }
+  mobileMoneyPayment.initiateMTNPayment(phone);
+};
