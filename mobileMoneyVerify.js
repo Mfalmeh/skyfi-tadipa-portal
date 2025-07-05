@@ -1,4 +1,3 @@
-alert('JS is running!');
 // Enhanced Mobile Money Payment Integration for Tadipa Captive Portal
 class MobileMoneyPayment {
     constructor() {
@@ -118,7 +117,8 @@ class MobileMoneyPayment {
             const options = {
                 method,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 signal: controller.signal
             };
@@ -134,11 +134,12 @@ class MobileMoneyPayment {
             clearTimeout(timeoutId);
 
             console.log('API response status:', response.status);
+            console.log('API response headers:', response.headers);
 
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('API error response:', errorText);
-                throw new Error(`Payment service error: ${response.status}`);
+                throw new Error(`Payment service error: ${response.status} - ${errorText}`);
             }
 
             const responseData = await response.json();
@@ -164,40 +165,60 @@ class MobileMoneyPayment {
         }
     }
 
-    // Payment status polling
+    // FIXED: Payment status polling with correct URL
     async pollPaymentStatus(transactionId, phoneNumber, amount) {
-    let pollAttempts = 0;
-    const maxAttempts = 12; // ~1 minute if interval is 5s
+        let pollAttempts = 0;
+        const maxAttempts = 20; // ~2 minutes if interval is 6s
 
-    const pollingInterval = setInterval(async () => {
-        pollAttempts++;
+        console.log(`Starting to poll payment status for transaction: ${transactionId}`);
 
-        try {
-            const res = await fetch(`/status/${transactionId}`);
-            const data = await res.json();
-            const status = data.state;
+        const pollingInterval = setInterval(async () => {
+            pollAttempts++;
+            console.log(`Polling attempt ${pollAttempts}/${maxAttempts} for transaction: ${transactionId}`);
 
-            if (status === "SUCCESSFUL") {
+            try {
+                // FIXED: Use full API URL instead of relative path
+                const response = await fetch(`${this.apiBaseUrl}/status/${transactionId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error(`Status check failed with status: ${response.status}`);
+                    throw new Error(`Status check failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Status check response:', data);
+
+                // Handle different response formats from your backend
+                const status = data.status || data.state || data.paymentStatus;
+                
+                if (status === "SUCCESSFUL" || status === "SUCCESS" || status === "PAID") {
+                    clearInterval(pollingInterval);
+                    console.log('Payment successful!');
+                    await this.handlePaymentSuccess(data, amount);
+                } else if (status === "FAILED" || status === "FAILURE" || status === "CANCELLED") {
+                    clearInterval(pollingInterval);
+                    console.log('Payment failed:', data);
+                    this.handlePaymentError(new Error(data.message || 'Payment was declined or failed'));
+                } else if (pollAttempts >= maxAttempts) {
+                    clearInterval(pollingInterval);
+                    console.log('Payment polling timeout');
+                    this.handlePaymentError(new Error('Payment verification timeout. Please check your transaction status.'));
+                } else {
+                    console.log(`Payment still pending. Status: ${status}`);
+                    // Continue polling
+                }
+            } catch (error) {
+                console.error('Polling error:', error);
                 clearInterval(pollingInterval);
-                hideProcessingModal();
-                showSuccessModal();
-            } else if (status === "FAILED") {
-                clearInterval(pollingInterval);
-                hideProcessingModal();
-                showFailureModal();
-            } else if (pollAttempts >= maxAttempts) {
-                clearInterval(pollingInterval);
-                hideProcessingModal();
-                showFailureModal(); // or showTimeoutModal() if you have one
+                this.handlePaymentError(new Error(`Failed to check payment status: ${error.message}`));
             }
-            // else: status is still pending — keep polling
-        } catch (error) {
-            console.error('Polling error:', error);
-            clearInterval(pollingInterval);
-            hideProcessingModal();
-            showFailureModal();
-        }
-    }, 5000);
+        }, 6000); // Poll every 6 seconds
     }
 
     // Handle successful payment
@@ -372,275 +393,3 @@ class MobileMoneyPayment {
 
 // Global instance
 const mobileMoneyPayment = new MobileMoneyPayment();
-
-// Enhanced UI functions
-function initiateMTNPayment() {
-    showPaymentModal('MTN Mobile Money', 'Enter your MTN phone number to purchase internet voucher (UGX 1,000)');
-}
-
-function showAirtelComingSoon() {
-    showPaymentModal('Airtel Money Coming Soon', `
-        <div style="text-align: center; padding: 1rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🚧</div>
-            <p>Airtel Money integration is coming soon!</p>
-            <p>Please use MTN Mobile Money for now, or contact our support team.</p>
-            <div style="margin-top: 1.5rem;">
-                <button onclick="initiateMTNPayment()" 
-                        style="margin: 0.5rem; padding: 10px 20px; background: #FFA500; 
-                               color: white; border: none; border-radius: 6px; cursor: pointer;">
-                    Use MTN Instead
-                </button>
-            </div>
-        </div>
-    `);
-}
-
-function showPaymentModal(title, message) {
-    const modal = document.getElementById('paymentModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalContent = document.getElementById('modalContent');
-    const closeBtn = document.getElementById('closeModalBtn');
-
-    if (!modal || !modalTitle || !modalContent) {
-        console.error('Payment modal elements not found');
-        return;
-    }
-
-    modalTitle.textContent = title;
-    modalContent.innerHTML = `
-        <div style="margin: 1rem 0;">
-            <p style="margin-bottom: 1.5rem;">${message}</p>
-            ${title.includes('MTN') ? `
-                <div style="margin-bottom: 1rem;">
-                    <input id="phoneInput" placeholder="Enter phone number (e.g., 0772123456)" 
-                           style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; 
-                                  border: 1px solid rgba(255,255,255,0.3); 
-                                  background: rgba(255,255,255,0.1); color: white; font-size: 1rem;" 
-                           type="tel" maxlength="13" />
-                    <div id="phoneValidation" style="font-size: 0.8rem; margin-top: 5px;"></div>
-                </div>
-                <button id="paymentSubmitBtn" onclick="processPayment()" disabled
-                        style="width: 100%; padding: 12px; margin-top: 10px;
-                               background: linear-gradient(135deg, #6dd0f1, #e0e793); 
-                               color: black; border: none; border-radius: 8px; 
-                               font-weight: 600; cursor: pointer; opacity: 0.5; font-size: 1rem;">
-                    💳 Purchase Voucher (UGX 1,000)
-                </button>
-                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.8;">
-                    🔒 Secure payment powered by MTN Mobile Money
-                </p>
-            ` : ''}
-        </div>
-    `;
-
-    if (closeBtn) closeBtn.style.display = 'block';
-    modal.style.display = 'block';
-
-    // Add real-time validation for phone input
-    const phoneInput = document.getElementById('phoneInput');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', validatePhoneInput);
-        phoneInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const submitBtn = document.getElementById('paymentSubmitBtn');
-                if (submitBtn && !submitBtn.disabled) {
-                    processPayment();
-                }
-            }
-        });
-        phoneInput.focus();
-    }
-}
-
-function validatePhoneInput() {
-    const phoneInput = document.getElementById('phoneInput');
-    const submitBtn = document.getElementById('paymentSubmitBtn');
-    const validation = document.getElementById('phoneValidation');
-    
-    if (!phoneInput || !submitBtn || !validation) return;
-
-    try {
-        const phoneData = mobileMoneyPayment.validatePhoneNumber(phoneInput.value);
-        validation.innerHTML = `<span style="color: #4CAF50;">✓ Valid ${phoneData.provider} number: ${phoneData.formatted}</span>`;
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-        submitBtn.style.cursor = 'pointer';
-    } catch (error) {
-        if (phoneInput.value.length > 0) {
-            validation.innerHTML = `<span style="color: #ff6b6b;">${error.message}</span>`;
-        } else {
-            validation.innerHTML = '';
-        }
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.5';
-        submitBtn.style.cursor = 'not-allowed';
-    }
-}
-
-async function processPayment() {
-    const phoneInput = document.getElementById('phoneInput');
-    if (!phoneInput || !phoneInput.value.trim()) {
-        alert('Please enter your phone number');
-        return;
-    }
-
-    try {
-        await mobileMoneyPayment.initiateMTNPayment(phoneInput.value.trim(), 1000);
-    } catch (error) {
-        console.error('Process payment error:', error);
-        alert(error.message || 'Failed to process payment. Please try again.');
-    }
-}
-
-// Utility functions
-function copyVoucherCode(code) {
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(code).then(() => {
-            showTemporaryMessage('Voucher code copied to clipboard!', 'success');
-        }).catch(() => {
-            fallbackCopyTextToClipboard(code);
-        });
-    } else {
-        fallbackCopyTextToClipboard(code);
-    }
-}
-
-function fallbackCopyTextToClipboard(text) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.top = '0';
-    textArea.style.left = '0';
-    textArea.style.position = 'fixed';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    
-    try {
-        document.execCommand('copy');
-        showTemporaryMessage('Voucher code copied!', 'success');
-    } catch (err) {
-        console.error('Fallback copy failed:', err);
-        showTemporaryMessage('Please manually copy the voucher code', 'error');
-    }
-    
-    document.body.removeChild(textArea);
-}
-
-function useVoucherNow(code) {
-    mobileMoneyPayment.redirectToVoucherAuth(code);
-}
-
-function contactSupport() {
-    window.open('https://wa.me/256768926395?text=Hello, I need help with my Tadipa payment', '_blank');
-}
-
-function closePaymentModal() {
-    const modal = document.getElementById('paymentModal');
-    if (modal) modal.style.display = 'none';
-}
-
-function showTemporaryMessage(message, type = 'info') {
-    const messageDiv = document.createElement('div');
-    messageDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: 600;
-        z-index: 10000;
-        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        animation: slideIn 0.3s ease-out;
-    `;
-    messageDiv.textContent = message;
-    
-    document.body.appendChild(messageDiv);
-    
-    setTimeout(() => {
-        messageDiv.style.animation = 'slideOut 0.3s ease-in';
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.parentNode.removeChild(messageDiv);
-            }
-        }, 300);
-    }, 3000);
-}
-
-// Enhanced voucher purchase handling
-function handleVoucherPurchase(event) {
-    event.preventDefault();
-    const button = event.target;
-    
-    // Add loading state
-    button.classList.add('loading');
-    const originalText = button.textContent;
-    button.textContent = 'Redirecting...';
-    
-    // Show payment options
-    setTimeout(() => {
-        button.classList.remove('loading');
-        button.textContent = originalText;
-        initiateMTNPayment();
-    }, 1000);
-}
-
-function showMessage(message, type = 'error') {
-    const placeholder = type === 'error' ? 
-        document.getElementById('error_placeholder') : 
-        document.getElementById('status_placeholder');
-    
-    if (placeholder) {
-        placeholder.textContent = message;
-        placeholder.style.display = 'block';
-        placeholder.style.padding = '10px';
-        placeholder.style.borderRadius = '8px';
-        placeholder.style.margin = '10px 0';
-        placeholder.style.background = type === 'error' ? 
-            'rgba(244, 67, 54, 0.1)' : 'rgba(76, 175, 80, 0.1)';
-        placeholder.style.border = type === 'error' ? 
-            '1px solid rgba(244, 67, 54, 0.3)' : '1px solid rgba(76, 175, 80, 0.3)';
-        placeholder.style.color = type === 'error' ? '#ff6b6b' : '#4CAF50';
-        
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-            placeholder.style.display = 'none';
-        }, 5000);
-    }
-}
-
-// Event listeners for enhanced UX
-document.addEventListener('DOMContentLoaded', function() {
-    // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
-        const modal = document.getElementById('paymentModal');
-        if (event.target === modal) {
-            closePaymentModal();
-        }
-    });
-
-    // Add escape key to close modal
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closePaymentModal();
-        }
-    });
-
-    // Add CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    console.log('Enhanced Mobile Money Payment System Initialized');
-});
