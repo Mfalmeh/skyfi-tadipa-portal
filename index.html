@@ -31,7 +31,7 @@
       <label for="terms">Agree with Terms of Service</label>
     </div>
 
-    <button type="submit" id="connect-button" disabled>Connect</button>
+    <button type="submit" id="form-control" disabled>Connect</button>
   </form>
 </section>
 
@@ -75,12 +75,13 @@
 
   <script>
   const termsCheckbox = document.getElementById('terms');
-  const connectButton = document.getElementById('connect-button');
+  const connectButton = document.getElementById('form-control');
 
   termsCheckbox.addEventListener('change', () => {
     connectButton.disabled = !termsCheckbox.checked;
   });
   </script>
-  			
-  		</body>
+	
+</body>
+
 </html>
