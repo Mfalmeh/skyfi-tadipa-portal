@@ -1,87 +1,107 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0" />
   <title>Tadipa - SkyFi</title>
-  <meta name="description" content="Connect to Tadipa WiFi - Fast, affordable internet for students" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="description"
+        content="Connect to Tadipa WiFi - Fast, affordable internet for students" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <div class="holder">
+    <!-- Logo -->
     <div class="logo tadipa-logo">
-      <img alt="Tadipa Logo" src="https://i.ibb.co/r99Zbs9/tadipa-Logo1-png.png" />
-    </div><div class="orb-container"></div>
-
-<div class="container">
-  <div class="welcome-text">
-    <h1>Welcome To Tadipa</h1>
-    <small>Stay safe. Stay comfortable.</small>
-    <small>Stay connected with Tadipa!</small>
-  </div>
-
-  <section id="voucher-section">
-  <form id="voucher-form" action="https://your-backend.com/validate" method="POST">
-    <input type="text" name="voucher" id="voucher" placeholder="Enter Voucher Code" required />
-
-    <div id="terms-container">
-      <input type="checkbox" id="terms" name="terms" required />
-      <label for="terms">Agree with Terms of Service</label>
+      <img src="https://i.ibb.co/r99Zbs9/tadipa-Logo1-png.png" alt="Tadipa Logo" />
     </div>
 
-    <button type="submit" id="form-control" disabled>Connect</button>
-  </form>
-</section>
+    <!-- Animated orbs -->
+    <div class="orb-container"></div>
 
-  <div class="divider"><span>Or</span></div>
+    <!-- Main card -->
+    <div class="container">
+      <div class="welcome-text">
+        <h1>Welcome To Tadipa</h1>
+        <small>Stay safe. Stay comfortable.</small>
+        <small>Stay connected with Tadipa!</small>
+      </div>
 
-  <div class="links">
-    <p>Buy Voucher</p>
+      <!-- Voucher form -->
+      <section id="voucher-section">
+        <form id="voucher-form" action="https://your-backend.com/validate" method="POST">
+          <input
+            type="text"
+            name="voucher"
+            id="voucher"
+            placeholder="Enter Voucher Code"
+            required
+          />
+
+          <div id="terms-container">
+            <input type="checkbox" id="terms" name="terms" required />
+            <label for="terms">Agree with Terms of Service</label>
+          </div>
+
+          <button type="submit" id="form-control" disabled>Connect</button>
+        </form>
+      </section>
+
+      <div class="divider"><span>Or</span></div>
+
+      <div class="links">
+        <p>Buy Voucher</p>
+      </div>
+
+      <div class="payment-logos">
+        <img src="https://i.ibb.co/ZzK7YNm3/mtn.png" alt="MTN MoMo" />
+        <img
+          class="airtel-disabled"
+          onclick="showAirtelComingSoon()"
+          src="https://i.ibb.co/N23H1b7g/airtel.png"
+          alt="Airtel Money"
+        />
+      </div>
+
+      <div class="support">
+        Need help? Call or WhatsApp
+        <a href="https://wa.me/256768926395" target="_blank">0768926395</a>
+      </div>
+    </div>
   </div>
 
-  <div class="payment-logos">
-    <img alt="MTN MoMo" src="https://i.ibb.co/ZzK7YNm3/mtn.png" />
-    <img alt="Airtel Money" class="airtel-disabled" onclick="showAirtelComingSoon()" src="https://i.ibb.co/N23H1b7g/airtel.png" />
-  </div>
-
-  <div class="support">
-    Need help? Call or WhatsApp <a href="https://wa.me/256768926395" target="_blank">0768926395</a>
-  </div>
-</div>
-
-  </div>  
   <div class="footer">
     <strong>Powered by SkyFi</strong> | Affordable. Fast. For Students.<br />
     <small>&copy; 2025 Intercom Inc. - All Rights Reserved.</small><br />
     <small>Made With ❤️ by Churchill</small>
-  </div> 
-  
-    <!-- Payment Modal --> 
+  </div>
+
+  <!-- Payment Modal -->
   <div class="payment-modal" id="paymentModal">
     <div class="payment-modal-content">
       <h3 id="modalTitle">Processing Payment...</h3>
       <div id="modalContent"></div>
-      <button class="close-modal" id="closeModalBtn" onclick="closePaymentModal()">Close</button>
+      <button class="close-modal" id="closeModalBtn" onclick="closePaymentModal()">
+        Close
+      </button>
     </div>
   </div>
-  	
-  <!-- Load custom mobile money logic -->
-  		
-  	<script src="mobileMoneyVerify.js">
-  		
-  	</script>
+
+  <!-- External scripts -->
+  <script src="mobileMoneyVerify.js"></script>
 
   <script>
-  const termsCheckbox = document.getElementById('terms');
-  const connectButton = document.getElementById('form-control');
+    const termsCheckbox = document.getElementById('terms');
+    const connectButton = document.getElementById('form-control');
 
-  termsCheckbox.addEventListener('change', () => {
-    connectButton.disabled = !termsCheckbox.checked;
-  });
+    // Disable / enable button on checkbox change
+    termsCheckbox.addEventListener('change', () => {
+      connectButton.disabled = !termsCheckbox.checked;
+    });
   </script>
-	
 </body>
-
 </html>
