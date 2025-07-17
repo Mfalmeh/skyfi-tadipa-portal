@@ -233,6 +233,14 @@ body {
             letter-spacing: 0.5px;
         }
 
+        .voucher,
+.connect-button {
+  width: 100%;
+  max-width: 280px;  /* Adjust as needed */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
         .btn:disabled {
             background: rgba(255, 255, 255, 0.2);
             color: rgba(255, 255, 255, 0.5);
