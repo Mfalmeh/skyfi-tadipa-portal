@@ -25,9 +25,15 @@
   <section id="voucher-section">
   <form id="voucher-form" action="https://your-backend.com/validate" method="POST">
     <input type="text" name="voucher" id="voucher" placeholder="Enter Voucher Code" required />
+
+    <div id="terms-container">
+      <input type="checkbox" id="terms" name="terms" required />
+      <label for="terms">Agree with Terms of Service</label>
+    </div>
+
     <button type="submit" id="connect-button">Connect</button>
   </form>
-  </section>
+</section>
 
   <div class="divider"><span>Or</span></div>
 
