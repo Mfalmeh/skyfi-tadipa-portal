@@ -31,7 +31,7 @@
       <label for="terms">Agree with Terms of Service</label>
     </div>
 
-    <button type="submit" id="connect-button">Connect</button>
+    <button type="submit" id="connect-button" disabled>Connect</button>
   </form>
 </section>
 
@@ -72,6 +72,15 @@
   	<script src="mobileMoneyVerify.js">
   		
   	</script>
+
+  <script>
+  const termsCheckbox = document.getElementById('terms');
+  const connectButton = document.getElementById('connect-button');
+
+  termsCheckbox.addEventListener('change', () => {
+    connectButton.disabled = !termsCheckbox.checked;
+  });
+  </script>
   			
   		</body>
 </html>
