@@ -358,7 +358,7 @@ body {
   50% { transform: scale(1.02); opacity: 0.95; }
 }
 
-/* 🔁 Shake animation */
+/* Shake animation */
 @keyframes shake {
   0% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
@@ -371,13 +371,13 @@ body {
   animation: shake 0.3s ease-in-out;
 }
 
-/* 🔴 Red glow for input error */
+/* Red glow for input error */
 .input-error {
-  border: 2px solid red !important;
-  box-shadow: 0 0 8px red !important;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.4); /* soft red glow */
+  border-color: rgba(255, 0, 0, 0.5);       /* optional subtle border */
 }
 
-/* 📣 Error message styling */
+/* Error message styling */
 #error-message {
   color: red;
   font-weight: 500;
