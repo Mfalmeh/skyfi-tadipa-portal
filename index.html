@@ -101,6 +101,7 @@
 
   <!-- External scripts -->
   <script src="mobileMoneyVerify.js"></script>
+  
   <!-- Submit handler -->
   <script>
   const termsCheckbox = document.getElementById('terms');
@@ -110,8 +111,16 @@
   const errorMessage = document.getElementById('error-message');
   const loadingState = document.getElementById('loading-state');
 
+  let errorTimeout;
+
   termsCheckbox.addEventListener('change', () => {
     connectButton.disabled = !termsCheckbox.checked;
+  });
+
+  voucherInput.addEventListener('input', () => {
+    voucherInput.classList.remove('input-error');
+    errorMessage.textContent = '';
+    clearTimeout(errorTimeout);
   });
 
   voucherForm.addEventListener('submit', async function (e) {
@@ -137,10 +146,17 @@
       } else {
         errorMessage.textContent = result.reason;
         voucherInput.classList.add('shake', 'input-error');
+
         setTimeout(() => {
           voucherInput.classList.remove('shake');
         }, 300);
+
         if (navigator.vibrate) navigator.vibrate(200);
+
+        // Fade out glow after delay if user doesn't type
+        errorTimeout = setTimeout(() => {
+          voucherInput.classList.remove('input-error');
+        }, 4000);
       }
     } catch (err) {
       errorMessage.textContent = 'Network error. Please try again.';
@@ -150,8 +166,7 @@
     voucherInput.disabled = false;
     loadingState.style.display = 'none';
   });
-</script>
+  </script>
 
-  
 </body>
 </html>
