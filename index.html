@@ -33,7 +33,7 @@
       
   <!-- Voucher form -->
   <section id="voucher-section">
-  <form id="voucher-form" action="http://45.91.168.206:3000/validate" method="POST">
+  <form id="voucher-form" action="http://api.skyfi.solutions/validate" method="POST">
     <input
       type="text"
       name="voucher"
@@ -42,18 +42,15 @@
       required
       pattern="[DWM][0-9]{6}"  <!-- Optional: enforce format like D123456 -->
     />
-    <button type="submit">Connect</button>
-  </form>
-  </section>
-
+  
           <div id="terms-container">
             <input type="checkbox" id="terms" name="terms" required />
             <label for="terms">Agree with Terms of Service</label>
           </div>
 
           <button type="submit" id="form-control" disabled>Connect</button>
-        </form>
-      </section>
+    </form>
+  </section>
 
       <div class="divider"><span>Or</span></div>
 
