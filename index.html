@@ -49,8 +49,13 @@
             <label for="terms">Agree with Terms of Service</label>
           </div>
 
-          <button type="submit" id="form-control" >Connect</button>
+          <button type="submit" id="form-control" disabled>Connect</button>
     </form>
+
+    <div id="loading-state" style="display: none; text-align: center; margin-top: 1em;">
+  <div class="spinner"></div>
+  <p>Validating voucher, hang tight...</p>
+    </div>
     
   </section>
 
@@ -96,53 +101,56 @@
 
   <!-- External scripts -->
   <script src="mobileMoneyVerify.js"></script>
-
+  <!-- Submit handler -->
   <script>
-    const termsCheckbox = document.getElementById('terms');
-    const connectButton = document.getElementById('form-control');
-
-    // Disable / enable button on checkbox change
-    termsCheckbox.addEventListener('change', () => {
-      connectButton.disabled = !termsCheckbox.checked;
-    });
-  
-  //Voucher Form Responsiveness 
+  const termsCheckbox = document.getElementById('terms');
+  const connectButton = document.getElementById('form-control');
   const voucherForm = document.getElementById('voucher-form');
   const voucherInput = document.getElementById('voucher');
   const errorMessage = document.getElementById('error-message');
-  errorMessage.id = 'error-message';
-  voucherForm.appendChild(errorMessage);
+  const loadingState = document.getElementById('loading-state');
+
+  termsCheckbox.addEventListener('change', () => {
+    connectButton.disabled = !termsCheckbox.checked;
+  });
 
   voucherForm.addEventListener('submit', async function (e) {
     e.preventDefault();
+    errorMessage.textContent = '';
+    connectButton.disabled = true;
+    voucherInput.disabled = true;
+    loadingState.style.display = 'block';
+
     const voucher = voucherInput.value;
 
-    const response = await fetch('https://api.skyfi.solutions/validate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ voucher })
-    });
+    try {
+      const response = await fetch('https://api.skyfi.solutions/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voucher })
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (result.success) {
-      window.location.href = 'https://tadipa.skyfi.solutions/success';
-    } else {
-      errorMessage.textContent = result.reason;
-
-      // Shake + red glow
-      voucherInput.classList.add('shake', 'input-error');
-      setTimeout(() => {
-        voucherInput.classList.remove('shake');
-      }, 300);
-
-      // Vibration
-      if (navigator.vibrate) {
-        navigator.vibrate(200);
+      if (result.success) {
+        window.location.href = 'https://tadipa.skyfi.solutions/success';
+      } else {
+        errorMessage.textContent = result.reason;
+        voucherInput.classList.add('shake', 'input-error');
+        setTimeout(() => {
+          voucherInput.classList.remove('shake');
+        }, 300);
+        if (navigator.vibrate) navigator.vibrate(200);
       }
+    } catch (err) {
+      errorMessage.textContent = 'Network error. Please try again.';
     }
+
+    connectButton.disabled = !termsCheckbox.checked;
+    voucherInput.disabled = false;
+    loadingState.style.display = 'none';
   });
-  </script>
+</script>
 
   
 </body>
