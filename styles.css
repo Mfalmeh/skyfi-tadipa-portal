@@ -158,8 +158,10 @@ body {
             color: rgba(255, 255, 255, 0.85);
             font-size: 0.9rem;
             line-height: 1.4;
+	    margin-bottom: 1.5rem;
         }
 
+        #voucher,
         .form-control,
         input[type="text"],
         input[type="email"],
