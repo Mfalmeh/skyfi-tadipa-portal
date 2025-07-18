@@ -141,6 +141,7 @@ body {
 
 #voucher:focus {
   outline: none;
+  margin-top: 1.5rem;
   border-color: #6dd0f1;
   box-shadow: 0 0 0 3px rgba(109, 208, 241, 0.2);
   background: rgba(255, 255, 255, 0.15);
