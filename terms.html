@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="">
+	<title>Terms and Conditions</title>
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" /><!-- Font Awesome -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+	<style type="text/css">:root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --background-light: #ffffff;
+            --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow-light: 0 4px 15px rgba(102, 126, 234, 0.1);
+            --shadow-medium: 0 8px 25px rgba(102, 126, 234, 0.15);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header-section {
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--background-gradient);
+        }
+
+        .go-back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--background-gradient);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .go-back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .logo-container {
+            margin: 20px 0 30px 0;
+        }
+
+        .logo-container img {
+            max-height: 80px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        .skyfi-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: var(--background-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .skyfi-tagline {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* Terms List Styling */
+        .terms-list {
+            counter-reset: main-counter;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .terms-list > li {
+            counter-increment: main-counter;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .terms-list > li::before {
+            content: counter(main-counter);
+            position: absolute;
+            left: -50px;
+            top: 0;
+            background: var(--background-gradient);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-light);
+        }
+
+        .term-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .sub-terms-list {
+            counter-reset: sub-counter;
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .sub-terms-list > li {
+            counter-increment: sub-counter;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .sub-terms-list > li::before {
+            content: counter(main-counter) "." counter(sub-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .nested-list {
+            counter-reset: nested-counter;
+            list-style: none;
+            padding-left: 25px;
+            margin-top: 10px;
+        }
+
+        .nested-list > li {
+            counter-increment: nested-counter;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .nested-list > li::before {
+            content: counter(nested-counter, lower-alpha) ")";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        /* Special styling for certain terms */
+        .highlight-term {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .info-term {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+
+        /* Footer Section */
+        .footer-section {
+            background: var(--background-gradient);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .acceptance-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header-section,
+            .content-section {
+                padding: 25px 20px;
+            }
+
+            .go-back-btn {
+                position: static;
+                margin-bottom: 20px;
+                align-self: flex-start;
+            }
+
+            .skyfi-logo {
+                font-size: 2rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .terms-list > li::before {
+                left: -40px;
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+
+            .term-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-primary: #ffffff;
+                --text-secondary: #b0b0b0;
+                --background-light: #2a2b2e;
+            }
+
+            body {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                color: var(--text-primary);
+            }
+
+            .intro-text {
+                background: linear-gradient(135deg, #333333 0%, #404040 100%);
+            }
+
+            .highlight-term {
+                background: linear-gradient(135deg, #4a2c2c 0%, #5a3333 100%);
+            }
+
+            .info-term {
+                background: linear-gradient(135deg, #2c3a4a 0%, #33475a 100%);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        .content-section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+	</style>
+</head>
+<body>
+<div class="container"><!-- Header Section -->
+<div class="header-section"><button class="go-back-btn" onclick="history.back()">Go back</button>
+<div class="logo-container">
+<div class="skyfi-logo">SkyFi</div>
+
+<div class="skyfi-tagline">Fast. Reliable. WiFi</div>
+<img alt="Logo" height="80" onerror="this.style.display='none'" src="logo.png" /></div>
+
+<h1 class="page-title">Terms and Conditions</h1>
+
+<p class="page-subtitle">Please read these terms carefully before using our service</p>
+</div>
+<!-- Content Section -->
+
+<div class="content-section">
+<div class="intro-text"><strong>Service Agreement:</strong> This agreement sets out the terms and conditions on which wireless internet access (&quot;the Service&quot;) is provided <em>free of charge</em> to you, a <em>customer/guest</em> of <em>[insert name of institution]</em> (&quot;us&quot;) in consideration for your custom, your agreement to these terms and conditions and your agreement to allow us to send to you by e-mail our promotional and marketing material.</div>
+
+<ol class="terms-list">
+	<li>
+	<h3 class="term-title">Extent of the Service</h3>
+
+	<ol class="sub-terms-list">
+		<li>We do not recommend in particular the use of any websites (or other internet related services) (&quot;Internet Services&quot;) and your use of Internet Services is carried out entirely at your own risk.</li>
+		<li>We have no responsibility for, or control over, the Internet Services you access and do not guarantee that any services are error or virus free.</li>
+		<li>We have no responsibility for, or control over, the information you transmit or receive via the Service.</li>
+		<li>Save for the purposes of network diagnostics we do not examine the use to which you put the Service or the nature of the information you send or receive.</li>
+		<li>We do not guarantee:
+		<ol class="nested-list">
+			<li>the availability of the Service;</li>
+			<li>the speed at which information may be transmitted or received via the Service; or</li>
+			<li>that the Service will be compatible with your equipment or any software which you use.</li>
+		</ol>
+		</li>
+		<li class="info-term">[Whilst we take reasonable steps to ensure the security of the Service and to prevent unlawful access to information transmitted or received using the Service] we do not guarantee the security of the information which you may transmit or receive using the Service or located on any equipment utilising the Service and you accept that it is your responsibility to protect your information and have adequate security (in terms of equipment and procedures) to ensure the security, integrity and confidentiality of your information and data.</li>
+		<li>We reserve the right at all times to withdraw the Service, change the specifications or manner of use of the Service, to change access codes, usernames, passwords or other security information necessary to access the service.</li>
+	</ol>
+	</li>
+	<li>
+	<h3 class="term-title">Your Use of the Service</h3>
+
+	<ol class="sub-terms-list">
+		<li class="highlight-term">You must not use the Service to access Internet Services, or send or receive e-mails, which:
+		<ol class="nested-list">
+			<li>contain obscene, profane or abusive language or material;</li>
+			<li>are defamatory, threatening, intimidatory or which could be classed as harassment;</li>
+			<li>contain pornographic material (that is text, pictures, films, video clips of a sexually explicit or arousing nature);</li>
+			<li>contain offensive or derogatory images regarding sex, race, religion, colour, origin, age, physical or mental disability, medical condition or sexual orientation;</li>
+			<li>contain material which infringe third party&#39;s rights (including intellectual property rights);</li>
+			<li>in our reasonable opinion may adversely affect the manner in which we carry out our business; or</li>
+			<li>are otherwise unlawful or inappropriate;</li>
+		</ol>
+		</li>
+		<li>Music, video, pictures, text and other content on the internet are copyright works and you should not download, alter, e-mail or otherwise use such content unless certain that the owner of such works has authorised its use by you.</li>
+		<li>We may terminate or temporarily suspend the Service if we reasonably believe that you are in breach of any provisions of this agreement including but not limited to clauses 2.1 to 2.3 above.</li>
+		<li>We recommend that you do not use the service to transmit or receive any confidential information or data and should you choose to do so you do so at your own risk.</li>
+		<li>The Service is intended for consumer use only. In the event that you use the Service for commercial purposes we would specifically refer you to clause 5.2 below.</li>
+	</ol>
+	</li>
+	<li>
+	<h3 class="term-title">Criminal Activity</h3>
+
+	<ol class="sub-terms-list">
+		<li class="highlight-term">You must not use the Service to engage in any activity which constitutes or is capable of constituting a criminal offence, either in the United Kingdom or in any state throughout the world.</li>
+		<li>You agree and acknowledge that we may be required to provide assistance and information to law enforcement, governmental agencies and other authorities.</li>
+		<li>You agree and acknowledge that we may keep a log of the Internet Protocol (&quot;IP&quot;) addresses of any devices which access the Service, the times when they have accessed the Service and the activity associated with that IP address</li>
+		<li>You further agree we are entitled to co-operate with law enforcement authorities and rights-holders in the investigation of any suspected or alleged illegal activity by you which may include, but is not limited to, disclosure of such information as we have (whether pursuant to clause 3.3 or otherwise), and are entitled to provide by law, to law enforcement authorities or rights-holders.</li>
+	</ol>
+	</li>
+	<li>
+	<h3 class="term-title">Our Use of your Information</h3>
+
+	<ol class="sub-terms-list">
+		<li>Subject to clauses 3.3 and 3.4 above we confirm that we shall use the contact details you provide to us solely for the purposes of contacting you with marketing information, updates, promotions and special offers relating to our business.</li>
+	</ol>
+	</li>
+	<li>
+	<h3 class="term-title">Other Terms</h3>
+
+	<ol class="sub-terms-list">
+		<li>You agree to compensate us fully for any claims or legal action made or threatened against us by someone else because you have used the service in breach of these terms and conditions, and in particular clause 2.1 to 2.3 and 3.1 above.</li>
+		<li>Whilst we do not seek to limit our responsibility for fraudulent misrepresentation or if you are injured or die as a result of our negligence we have no responsibility (to the extent permitted by law) to compensate you (whether or not we are negligent) for any direct financial loss, loss of profit, revenue, time, anticipated savings or profit or revenue, opportunity, data, use, business, wasted expenditure, business interruption, loss arising from disclosure of confidential information, loss arising from or in connection with use of the service or inability to use or access the service or a failure, suspension or withdrawal of all or part of the service at any time or damage to physical property or for any other similar direct loss that may arise in relation to this agreement whether or not we were advised in advance of the possibility of such loss or damage.</li>
+		<li>We agree that neither this agreement does not allow either party to act as, or hold themselves out as, acting as an agent of the other party and that that the terms of this agreement are not enforceable by a third party under the Contracts (Rights of Third Parties) Act 1999.</li>
+		<li>This agreement is governed by the law of United States of America and is subject to the non-exclusive jurisdiction of the US courts.</li>
+	</ol>
+	</li>
+</ol>
+</div>
+<!-- Footer Section -->
+
+<div class="footer-section">
+<div class="acceptance-icon"></div>
+
+<p class="footer-text"><strong>By continuing, you confirm that you accept these terms and conditions as the basis of your use of the wireless internet access provided.</strong></p>
+</div>
+</div>
+<script src="/assets/js/cp-scripts.min.js"></script></body>
+</html>
