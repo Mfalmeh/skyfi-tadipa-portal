@@ -30,17 +30,21 @@
         <small>Stay safe. Stay comfortable.</small>
         <small>Stay connected with Tadipa!</small>
       </div>
-
-      <!-- Voucher form -->
-      <section id="voucher-section">
-        <form id="voucher-form" action="https://your-backend.com/validate" method="POST">
-          <input
-            type="text"
-            name="voucher"
-            id="voucher"
-            placeholder="Enter Voucher Code"
-            required
-          />
+      
+  <!-- Voucher form -->
+  <section id="voucher-section">
+  <form id="voucher-form" action="http://45.91.168.206:3000/validate" method="POST">
+    <input
+      type="text"
+      name="voucher"
+      id="voucher"
+      placeholder="Enter Voucher Code"
+      required
+      pattern="[DWM][0-9]{6}"  <!-- Optional: enforce format like D123456 -->
+    />
+    <button type="submit">Connect</button>
+  </form>
+  </section>
 
           <div id="terms-container">
             <input type="checkbox" id="terms" name="terms" required />
