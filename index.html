@@ -166,6 +166,38 @@
     voucherInput.disabled = false;
     loadingState.style.display = 'none';
   });
+
+  // Minimal device fingerprint module (East Africa Edition)
+  function generateDeviceFingerprint() {
+  // Base signals
+  const userAgent = navigator.userAgent;
+  const platform = navigator.platform;
+  const language = navigator.language;
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const screenSize = `${window.screen.width}x${window.screen.height}`;
+  const touchSupport = 'ontouchstart' in window ? 'touch' : 'no-touch';
+
+  // Seed data
+  const rawData = `${userAgent}|${platform}|${language}|${timezone}|${screenSize}|${touchSupport}`;
+
+  // Simple hash function (djb2)
+  let hash = 5381;
+  for (let i = 0; i < rawData.length; i++) {
+    hash = (hash * 33) ^ rawData.charCodeAt(i);
+  }
+
+  // Final fingerprint
+  return 'skyfi-' + (hash >>> 0).toString(16);
+}
+
+// Store fingerprint for persistence
+if (!localStorage.getItem('device_id')) {
+  localStorage.setItem('device_id', generateDeviceFingerprint());
+}
+
+// Access anywhere in your portal
+const device_id = localStorage.getItem('device_id');
+    
   </script>
 
 </body>
